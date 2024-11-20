@@ -1,2 +1,3 @@
-*.ghc
+*.gch
 main
+*data.txt
