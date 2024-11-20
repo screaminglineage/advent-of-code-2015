@@ -14,35 +14,26 @@ typedef struct {
     size_t capacity;
 } Points;
 
-bool contains(Points points, Point p) {
-    for (size_t i = 0; i < points.size; i++) {
-        Point p1 = points.data[i];
-        if (p1.x == p.x && p1.y == p.y) {
-            return true;
+
+// insert only if point doesnt exist
+void dyn_update(Points *points, Point point) {
+    for (size_t i = 0; i < points->size; i++) {
+        Point p = points->data[i];
+        if (p.x == point.x && p.y == point.y) {
+            return;
         }
     }
-    return false;
+    DYN_APPEND(points, point);
 }
 
-int count_unique_points(Points points) {
-    Points unique_points = {0};
-    for (size_t i = 0; i < points.size; i++) {
-        Point p1 = points.data[i];
-        if (contains(unique_points, p1)) {
-            continue;
-        }
-        DYN_APPEND(&unique_points, p1);
-    }
-    return unique_points.size;
-}
 
 int part1(char *data) {
     Points points = {0};
-    Point start = {0, 0};
-    DYN_APPEND(&points, start);
+    Point current = {0, 0};
+    DYN_APPEND(&points, current);
 
     for (size_t i = 0; data[i]; i++) {
-        Point next = {points.data[points.size - 1].x, points.data[points.size - 1].y};
+        Point next = current;
         switch (data[i]) {
             case '^':
                 next.y += 1;
@@ -59,24 +50,24 @@ int part1(char *data) {
             default:
                 continue;
         }
-        DYN_APPEND(&points, next);
+        dyn_update(&points, next);
+        current = next;
     }
-    return count_unique_points(points);
+    return points.size;
 }
 
 int part2(char *data) {
-    Points points_santa = {0};
-    Points points_robo = {0};
-    Point start = {0, 0};
-    DYN_APPEND(&points_santa, start);
-    DYN_APPEND(&points_robo, start);
+    Points points = {0};
+    Point current_santa = {0, 0};
+    Point current_robo = {0, 0};
+    DYN_APPEND(&points, current_santa);
 
     for (size_t i = 0; data[i]; i++) {
-        Point next; 
+        Point next;
         if (i % 2 == 0) {
-            next = (Point){points_santa.data[points_santa.size - 1].x, points_santa.data[points_santa.size - 1].y};
+            next = current_santa;
         } else {
-            next = (Point){points_robo.data[points_robo.size - 1].x, points_robo.data[points_robo.size - 1].y};
+            next = current_robo;
         }
 
         switch (data[i]) {
@@ -96,13 +87,13 @@ int part2(char *data) {
                 continue;
         }
         if (i % 2 == 0) {
-            DYN_APPEND(&points_santa, next);
+            current_santa = next;
         } else {
-            DYN_APPEND(&points_robo, next);
+            current_robo = next;
         }
+        dyn_update(&points, next);
     }
-    DYN_EXTEND(&points_santa, &points_robo);
-    return count_unique_points(points_santa);
+    return points.size;
 }
 
 
