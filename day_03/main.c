@@ -1,92 +1,118 @@
 #include <stdio.h>
+#include <stdbool.h>
+#include <assert.h>
 #include <stdlib.h>
-#include <stdint.h>
 #include "../aoc.h"
 
 typedef struct {
-  int x;
-  int y;
+    int x, y;
 } Point;
 
 typedef struct {
-  Point point;
-  int count;
-} PointCount;
+    Point *data;
+    size_t size;
+    size_t capacity;
+} Points;
 
-typdef struct {
-  PointCount points[1024];
-  size_t size;
-} AssocArr;
-
-// up, down, left, right
-Point DELTAS[] = {
-  (Point) { 0, -1 },
-  (Point) { 0, 1 },
-  (Point) { -1, 0 },
-  (Point) { 1, 0 },
-};
-
-size_t assoc_arr_get(AssocArr arr, Point point) {
-  for (size_t i = 0; i < arr.size; i++) {
-    Point arr_point = arr.points[i].point;
-    if (arr_point.x == point.x && arr_point.y == point.y) {
-      return i;
+bool contains(Points points, Point p) {
+    for (size_t i = 0; i < points.size; i++) {
+        Point p1 = points.data[i];
+        if (p1.x == p.x && p1.y == p.y) {
+            return true;
+        }
     }
-  }
-  if (arr.size > 1024) {
-    printf("Associative Array Full!\n");
-    exit(1);
-  }
-
-  arr.points[arr.size++] = {.point = point, .count = 1};
-  return arr.size - 1;
+    return false;
 }
 
-Point point_add(Point a, Point b) {
-  return (Point){
-    .x = a.x + b.x,
-    .y = a.y + b.y,
-  };
-}
-
-int part1(char* data) {
-  AssocArr arr = {0};
-  arr.points[0] = (AssocArr){
-    .point = (Point){ 0, 0 },
-    .count = 1
-  };
-  arr.size = 1;
-  for (char* ch = data; *ch != 0; ch++ ) {
-    Point current = {0, 0};
-    if (*ch == '^') {
-      current = point_add(current, DELTA[0]);
-
-    } else if (*ch == 'v') {
-      current = point_add(current, DELTA[1]);
-    } else if (*ch == '<') {
-      current = point_add(current, DELTA[2]);
-    } else if (*ch == '>') {
-      current = point_add(current, DELTA[3]);
-    } else {
-      printf("GOT %c\n", *ch);
-      exit(1);
+int count_unique_points(Points points) {
+    Points unique_points = {0};
+    for (size_t i = 0; i < points.size; i++) {
+        Point p1 = points.data[i];
+        if (contains(unique_points, p1)) {
+            continue;
+        }
+        DYN_APPEND(&unique_points, p1);
     }
-  }
-
-  return 0;
+    return unique_points.size;
 }
 
-int part2(char* data) {
-  return 0;
+int part1(char *data) {
+    Points points = {0};
+    Point start = {0, 0};
+    DYN_APPEND(&points, start);
+
+    for (size_t i = 0; data[i]; i++) {
+        Point next = {points.data[points.size - 1].x, points.data[points.size - 1].y};
+        switch (data[i]) {
+            case '^':
+                next.y += 1;
+                break;
+            case '>':
+                next.x += 1;
+                break;
+            case 'v':
+                next.y -= 1;
+                break;
+            case '<':
+                next.x -= 1;
+                break;
+            default:
+                continue;
+        }
+        DYN_APPEND(&points, next);
+    }
+    return count_unique_points(points);
 }
+
+int part2(char *data) {
+    Points points_santa = {0};
+    Points points_robo = {0};
+    Point start = {0, 0};
+    DYN_APPEND(&points_santa, start);
+    DYN_APPEND(&points_robo, start);
+
+    for (size_t i = 0; data[i]; i++) {
+        Point next; 
+        if (i % 2 == 0) {
+            next = (Point){points_santa.data[points_santa.size - 1].x, points_santa.data[points_santa.size - 1].y};
+        } else {
+            next = (Point){points_robo.data[points_robo.size - 1].x, points_robo.data[points_robo.size - 1].y};
+        }
+
+        switch (data[i]) {
+            case '^':
+                next.y += 1;
+                break;
+            case '>':
+                next.x += 1;
+                break;
+            case 'v':
+                next.y -= 1;
+                break;
+            case '<':
+                next.x -= 1;
+                break;
+            default:
+                continue;
+        }
+        if (i % 2 == 0) {
+            DYN_APPEND(&points_santa, next);
+        } else {
+            DYN_APPEND(&points_robo, next);
+        }
+    }
+    DYN_EXTEND(&points_santa, &points_robo);
+    return count_unique_points(points_santa);
+}
+
+
 
 int main(int argc, char** argv) {
-  char* input_file = argv[1];
-  char* data = read_to_str(input_file);
+    char* input_file = argv[1];
+    char* data = read_to_str(input_file);
 
-  printf("Part 1: %d\n", part1(data));
-  printf("Part 2: %d\n", part2(data));
-  return 0;
+    printf("Part 1: %d\n", part1(data));
+    printf("Part 2: %d\n", part2(data));
+    return 0;
 }
-
 

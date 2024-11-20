@@ -1,6 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define DYN_APPEND(da, item)                                                      \
+do {                                                                         \
+    if ((da)->size == (da)->capacity) {                                        \
+        (da)->capacity = ((da)->capacity <= 0) ? 1 : (da)->capacity * 2;         \
+        (da)->data = realloc((da)->data, (da)->capacity * sizeof(*(da)->data));  \
+        assert((da)->data && "Catastrophic Failure: Allocation failed!");        \
+    }                                                                          \
+    (da)->data[(da)->size++] = item;                                           \
+} while (0)
+
+
+#define DYN_EXTEND(da1, da2)                        \
+do {                                                \
+    for(size_t i = 0; i < (da2)->size; i++) {       \
+        DYN_APPEND((da1), (da2)->data[i]);          \
+    }                                               \
+} while(0)
+
+
 #define MIN_ELEM(arr, count) ({ \
   typeof((arr[0])) __min = (arr[0]); \
   do { \
