@@ -6,7 +6,6 @@
 
 #define WIDTH 999
 #define HEIGHT 999
-bool arr[WIDTH*HEIGHT] = {0};
 
 typedef enum {
     TOGGLE,
@@ -25,40 +24,6 @@ typedef struct {
     size_t capacity;
 } RectActions;
 
-
-int count_lights() {
-    int count = 0;
-    for (size_t i = 0; i < WIDTH*HEIGHT; i++) {
-        if (arr[i]) count += 1;
-    }
-    return count;
-}
-
-int set_lights(RectActions actions) {
-    for (size_t i = 0; i < actions.size; i++) {
-        RectAction action = actions.data[i];
-
-        for (size_t y = action.y1; y <= action.y2; y++) {
-            for (size_t x = action.x1; x <= action.x2; x++) {
-                switch (action.action) {
-                    case TOGGLE:
-                        arr[y*WIDTH + x] = !arr[y*WIDTH + x];
-                        break;
-                    case TURN_ON:
-                        arr[y*WIDTH + x] = true;
-                        break;
-                    case TURN_OFF:
-                        arr[y*WIDTH + x] = false;
-                        break;
-                    default:
-                        printf("Unreachable: %d\n", action.action);
-                        exit(1);
-                }
-            }
-        }
-    }
-    return count_lights();
-}
 
 
 bool starts_with(char *string, char *prefix, size_t *index) {
@@ -94,18 +59,98 @@ RectAction parse_line(char *line) {
     return r;
 }
 
+
+int count_lights(bool *lights) {
+    int count = 0;
+    for (size_t i = 0; i < WIDTH*HEIGHT; i++) {
+        if (lights[i]) count += 1;
+    }
+    return count;
+}
+
+int set_lights_1(RectActions actions, bool *lights) {
+    for (size_t i = 0; i < actions.size; i++) {
+        RectAction action = actions.data[i];
+
+        for (size_t y = action.y1; y <= action.y2; y++) {
+            for (size_t x = action.x1; x <= action.x2; x++) {
+                switch (action.action) {
+                    case TOGGLE:
+                        lights[y*WIDTH + x] = !lights[y*WIDTH + x];
+                        break;
+                    case TURN_ON:
+                        lights[y*WIDTH + x] = true;
+                        break;
+                    case TURN_OFF:
+                        lights[y*WIDTH + x] = false;
+                        break;
+                    default:
+                        printf("Unreachable: %d\n", action.action);
+                        exit(1);
+                }
+            }
+        }
+    }
+    return count_lights(lights);
+}
+
+
 int part1(char *data) {
+    bool lights[WIDTH*HEIGHT] = {0};
     char *line = strtok(data, "\n");
     RectActions actions = {0};
     while (line) {
         DYN_APPEND(&actions, parse_line(line));
 	    line = strtok(NULL, "\n");
     }
-    return set_lights(actions);
+    return set_lights_1(actions, lights);
 }
 
+
+int count_brightness(int *lights) {
+    int count = 0;
+    for (size_t i = 0; i < WIDTH*HEIGHT; i++) {
+        count += lights[i];
+    }
+    return count;
+}
+
+int set_lights_2(RectActions actions, int *lights) {
+    for (size_t i = 0; i < actions.size; i++) {
+        RectAction action = actions.data[i];
+
+        for (size_t y = action.y1; y <= action.y2; y++) {
+            for (size_t x = action.x1; x <= action.x2; x++) {
+                switch (action.action) {
+                    case TOGGLE:
+                        lights[y*WIDTH + x] += 2;
+                        break;
+                    case TURN_ON:
+                        lights[y*WIDTH + x] += 1;
+                        break;
+                    case TURN_OFF:
+                        if (lights[y*WIDTH + x] > 0) lights[y*WIDTH + x] -= 1;
+                        break;
+                    default:
+                        printf("Unreachable: %d\n", action.action);
+                        exit(1);
+                }
+            }
+        }
+    }
+    return count_brightness(lights);
+}
+
+
 int part2(char *data) {
-    return 0;
+    int lights[WIDTH*HEIGHT] = {0};
+    char *line = strtok(data, "\n");
+    RectActions actions = {0};
+    while (line) {
+        DYN_APPEND(&actions, parse_line(line));
+	    line = strtok(NULL, "\n");
+    }
+    return set_lights_2(actions, lights);
 }
 
 
