@@ -1,11 +1,8 @@
-aoc:
-	gcc -o aoc.h.gch ../aoc.h
-
-all: aoc
+all:
 	gcc -o main main.c
 
 run: all
 	./main "data.txt"
 
 clean:
-	rm main *.gch
+	rm main

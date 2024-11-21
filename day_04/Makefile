@@ -8,4 +8,4 @@ run: all
 	./main "data.txt"
 
 clean:
-	rm main *.gch *.o
+	rm main *.o
