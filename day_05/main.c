@@ -57,30 +57,26 @@ int part1(char *data) {
 }
 
 bool letters_match_2(char *string) {
+    bool doubles_with_gap = false;
+    bool matching_pairs = false;
     for (size_t i = 0; string[i] && string[i+1] && string[i+2]; i++) {
         if (string[i] == string[i+2]) {
-            return true;
+            doubles_with_gap = true;
         }
-    }
-}
-
-bool pair_appears_twice(char *string) {
-    for (size_t i = 0; string[i] && string[i+1]; i++) {
-        // search for identical pair to string[i], string[i+1]
         for (size_t j = i+2; string[j] && string[j+1]; j++) {
             if (string[i] == string[j] && string[i+1] == string[j+1]) {
-                return true;
+                matching_pairs = true;
             }
         }
     }
-    return false;
+    return doubles_with_gap && matching_pairs;
 }
 
 int part2(char *data) {
     char *line = strtok(data, "\n");
     int nice_strings = 0;
     while (line) {
-        if (letters_match_2(line) && pair_appears_twice(line)) {
+        if (letters_match_2(line)) {
             nice_strings += 1;
         }
 	    line = strtok(NULL, "\n");
