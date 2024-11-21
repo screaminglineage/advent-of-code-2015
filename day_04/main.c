@@ -51,6 +51,7 @@ int part2(char *data) {
 
 
 int main(int argc, char** argv) {
+    (void)argc;
     char* input_file = argv[1];
     char* data = read_to_str(input_file);
 

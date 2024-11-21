@@ -72,8 +72,8 @@ int set_lights_1(RectActions actions, bool *lights) {
     for (size_t i = 0; i < actions.size; i++) {
         RectAction action = actions.data[i];
 
-        for (size_t y = action.y1; y <= action.y2; y++) {
-            for (size_t x = action.x1; x <= action.x2; x++) {
+        for (int y = action.y1; y <= action.y2; y++) {
+            for (int x = action.x1; x <= action.x2; x++) {
                 switch (action.action) {
                     case TOGGLE:
                         lights[y*WIDTH + x] = !lights[y*WIDTH + x];
@@ -119,8 +119,8 @@ int set_lights_2(RectActions actions, int *lights) {
     for (size_t i = 0; i < actions.size; i++) {
         RectAction action = actions.data[i];
 
-        for (size_t y = action.y1; y <= action.y2; y++) {
-            for (size_t x = action.x1; x <= action.x2; x++) {
+        for (int y = action.y1; y <= action.y2; y++) {
+            for (int x = action.x1; x <= action.x2; x++) {
                 switch (action.action) {
                     case TOGGLE:
                         lights[y*WIDTH + x] += 2;
@@ -155,6 +155,7 @@ int part2(char *data) {
 
 
 int main(int argc, char** argv) {
+    (void)argc;
     char *input_file = argv[1];
     size_t count = 0;
     char *data = read_to_str_size(input_file, &count);

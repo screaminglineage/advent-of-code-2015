@@ -22,10 +22,10 @@ bool letters_match(char *string) {
     int vowels_count = 0;
     size_t i = 0;
     for (; string[i] && string[i+1]; i++) {
-        if (string[i] == 'a' && string[i+1] == 'b'
-            || string[i] == 'c' && string[i+1] == 'd'
-            || string[i] == 'p' && string[i+1] == 'q'
-            || string[i] == 'x' && string[i+1] == 'y') {
+        if ((string[i] == 'a' && string[i+1] == 'b')
+            || (string[i] == 'c' && string[i+1] == 'd')
+            || (string[i] == 'p' && string[i+1] == 'q')
+            || (string[i] == 'x' && string[i+1] == 'y')) {
             return false;
         }
 
@@ -87,6 +87,7 @@ int part2(char *data) {
 
 
 int main(int argc, char** argv) {
+    (void)argc;
     char *input_file = argv[1];
     size_t count = 0;
     char *data = read_to_str_size(input_file, &count);

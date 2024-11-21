@@ -1,5 +1,5 @@
 all:
-	gcc -o main main.c
+	gcc -Wall -Wextra -o main main.c
 
 run: all
 	./main "data.txt"
