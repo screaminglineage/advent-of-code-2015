@@ -34,19 +34,35 @@ do {                                                \
 
 #define ARR_LEN(arr) (sizeof((arr))/sizeof((arr[0])))
 
-char* read_to_str(char* filepath) {
-  FILE* file = fopen(filepath, "r");
-  fseek(file, 0, SEEK_END);
-  long size = ftell(file);
-  rewind(file);
+char *read_to_str(char* filepath) {
+    FILE* file = fopen(filepath, "r");
+    fseek(file, 0, SEEK_END);
+    long size = ftell(file);
+    rewind(file);
 
-  char* data = malloc(size + 1);
-  fread(data, size, 1, file);
-  fclose(file);
+    char* data = malloc(size + 1);
+    fread(data, size, 1, file);
+    fclose(file);
 
-  data[size] = 0;
-  return data;
+    data[size] = 0;
+    return data;
 }
+
+char *read_to_str_size(char* filepath, size_t *size_out) {
+    FILE* file = fopen(filepath, "r");
+    fseek(file, 0, SEEK_END);
+    long size = ftell(file);
+    rewind(file);
+
+    char* data = malloc(size + 1);
+    fread(data, size, 1, file);
+    fclose(file);
+
+    data[size] = 0;
+    *size_out = size + 1;
+    return data;
+}
+
 
 
 

@@ -87,10 +87,14 @@ int part2(char *data) {
 
 
 int main(int argc, char** argv) {
-    char* input_file = argv[1];
-    char* data = read_to_str(input_file);
+    char *input_file = argv[1];
+    size_t count = 0;
+    char *data = read_to_str_size(input_file, &count);
 
-    // printf("Part 1: %d\n", part1(data));
+    // part1 uses strtok which destroys the original string
+    char *part1_data = malloc(count);
+    strcpy(part1_data, data);
+    printf("Part 1: %d\n", part1(part1_data));
     printf("Part 2: %d\n", part2(data));
     return 0;
 }
