@@ -40,7 +40,13 @@ int part1(char *data) {
 }
 
 int part2(char *data) {
-    return 0;
+    // allocate a ridiculous amount of space to solve it in the dumbest way
+    char *a = calloc(1024*1024*1024, sizeof(char));
+    char *b = calloc(1024*1024*1024, sizeof(char));
+
+    char *current = a, *next = b;
+    strcpy(current, data);
+    return look_and_say(data, current, next, 50);
 }
 
 int main(int argc, char** argv) {
