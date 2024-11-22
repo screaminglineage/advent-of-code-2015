@@ -9,7 +9,7 @@ do {                                                                         \
         (da)->data = realloc((da)->data, (da)->capacity * sizeof(*(da)->data));  \
         assert((da)->data && "Catastrophic Failure: Allocation failed!");        \
     }                                                                          \
-    (da)->data[(da)->size++] = item;                                           \
+    (da)->data[(da)->size++] = (item);                                           \
 } while (0)
 
 
