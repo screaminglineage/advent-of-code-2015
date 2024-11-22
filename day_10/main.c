@@ -41,8 +41,8 @@ int part1(char *data) {
 
 int part2(char *data) {
     // allocate a ridiculous amount of space to solve it in the dumbest way
-    char *a = calloc(1024*1024*1024, sizeof(char));
-    char *b = calloc(1024*1024*1024, sizeof(char));
+    char *a = calloc(1024*1024*4, sizeof(char));
+    char *b = calloc(1024*1024*4, sizeof(char));
 
     char *current = a, *next = b;
     strcpy(current, data);
