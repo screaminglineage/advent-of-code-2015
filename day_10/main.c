@@ -4,16 +4,8 @@
 #include <string.h>
 #include "../aoc.h"
 
-
-int part1(char *data) {
-    // allocate a ridiculous amount of space to solve it in the dumbest way
-    char a[1024*1024] = {0};
-    char b[1024*1024] = {0};
-
-    char *current = a, *next = b;
-    strcpy(current, data);
-
-    for (size_t i = 0; i < 40; i++) {
+size_t look_and_say(char *data, char *current, char *next, int iterations) {
+    for (int i = 0; i < iterations; i++) {
         char ch = current[0];
         int count = 0;
         char *old_next = next;
@@ -33,8 +25,18 @@ int part1(char *data) {
         next = current;
         current = tmp;
     }
-
     return strlen(current);
+}
+
+
+int part1(char *data) {
+    // allocate a ridiculous amount of space to solve it in the dumbest way
+    char a[1024*1024] = {0};
+    char b[1024*1024] = {0};
+
+    char *current = a, *next = b;
+    strcpy(current, data);
+    return look_and_say(data, current, next, 40);
 }
 
 int part2(char *data) {
