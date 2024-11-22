@@ -6,7 +6,7 @@
 
 
 int part1(char *data) {
-    data = "1113222113";
+    // allocate a ridiculous amount of space to solve it in the dumbest way
     char a[1024*1024] = {0};
     char b[1024*1024] = {0};
 
@@ -46,6 +46,7 @@ int main(int argc, char** argv) {
     char *input_file = argv[1];
     size_t count = 0;
     char *data = read_to_str_size(input_file, &count);
+    data[strcspn(data, "\n")] = 0;
 
     printf("Part 1: %d\n", part1(data));
     printf("Part 2: %d\n", part2(data));
