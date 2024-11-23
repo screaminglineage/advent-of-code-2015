@@ -4,7 +4,7 @@
 #include <string.h>
 #include "../aoc.h"
 
-size_t look_and_say(char *data, char *current, char *next, int iterations) {
+size_t look_and_say(char *current, char *next, int iterations) {
     for (int i = 0; i < iterations; i++) {
         char ch = current[0];
         int count = 0;
@@ -36,7 +36,7 @@ int part1(char *data) {
 
     char *current = a, *next = b;
     strcpy(current, data);
-    return look_and_say(data, current, next, 40);
+    return look_and_say(current, next, 40);
 }
 
 int part2(char *data) {
@@ -46,14 +46,13 @@ int part2(char *data) {
 
     char *current = a, *next = b;
     strcpy(current, data);
-    return look_and_say(data, current, next, 50);
+    return look_and_say(current, next, 50);
 }
 
 int main(int argc, char** argv) {
     (void)argc;
     char *input_file = argv[1];
-    size_t count = 0;
-    char *data = read_to_str_size(input_file, &count);
+    char *data = read_to_str(input_file);
     data[strcspn(data, "\n")] = 0;
 
     printf("Part 1: %d\n", part1(data));
