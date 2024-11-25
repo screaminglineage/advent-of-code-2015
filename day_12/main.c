@@ -62,6 +62,7 @@ bool inc_state(State *state) {
             state->count_stack.data[top - 1].count += state->count_stack.data[top].count;
         }
         state->count_stack.size -= 1;
+
     } else if (state->data[0] == '[') {
         DYN_APPEND(&(state->count_stack), ((Count){0, false}));
     } else if (state->data[0] == ']') {
@@ -87,15 +88,6 @@ bool parse_num(State *state, int *num) {
     strncpy(buf, start, state->data - start);
     *num = atoi(buf);
     return true;
-}
-
-int sum(Stack count_stack) {
-    int sum = 0;
-    for (size_t i = 0; i < count_stack.size; i++) {
-        printf("count_stack.data[i].count = %d\n", count_stack.data[i].count);
-        sum += count_stack.data[i].count;
-    }
-    return sum;
 }
 
 int part2(char *data) {
