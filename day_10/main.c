@@ -30,7 +30,7 @@ size_t look_and_say(char *current, char *next, int iterations) {
 
 
 int part1(char *data) {
-    // allocate a ridiculous amount of space to solve it in the dumbest way
+    // allocate a ridiculous amount of memory to solve it in the dumbest way
     char a[1024*1024] = {0};
     char b[1024*1024] = {0};
 
@@ -40,7 +40,7 @@ int part1(char *data) {
 }
 
 int part2(char *data) {
-    // allocate a ridiculous amount of space to solve it in the dumbest way
+    // allocate a ridiculous amount of memory to solve it in the dumbest way
     char *a = calloc(1024*1024*4, sizeof(char));
     char *b = calloc(1024*1024*4, sizeof(char));
 
