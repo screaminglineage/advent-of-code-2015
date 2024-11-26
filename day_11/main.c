@@ -36,7 +36,7 @@ void increment_password(const char *password, char *next) {
 bool password_check(const char *password) {
     bool increasing_run = false;
     bool excluded = true;
-    int pairs_index = -1;
+    size_t pairs_index = -1;
     int pairs = 0;
     for (size_t i = 0; password[i]; i++) {
         if (password[i] == 'i' || password[i] == 'l' || password[i] == 'o') {
@@ -53,10 +53,14 @@ bool password_check(const char *password) {
             pairs_index = i;
         }
     }
-    /*printf("increasing_run = %d\n", increasing_run);*/
-    /*printf("excluded = %d\n", excluded);*/
-    /*printf("pairs = %d\n", pairs >= 2);*/
     return increasing_run && excluded && pairs >= 2;
+}
+
+void next_password(char *current, char *next) {
+    while (!password_check(current)) {
+        increment_password(current, next);
+        strcpy(current, next);
+    }
 }
 
 
@@ -64,27 +68,20 @@ void part1(char *data) {
     char current[9] = {0};
     char next[9] = {0};
     strcpy(current, data);
-    while (!password_check(current)) {
-        increment_password(current, next);
-        strcpy(current, next);
-    }
+    next_password(current, next);
     printf("Part 1: %s\n", current);
 }
 
-int part2(char *data) {
+void part2(char *data) {
     char current[9] = {0};
     char next[9] = {0};
     strcpy(current, data);
-    while (!password_check(current)) {
-        increment_password(current, next);
-        strcpy(current, next);
-    }
+
+    next_password(current, next);
     increment_password(current, next);
     strcpy(current, next);
-    while (!password_check(current)) {
-        increment_password(current, next);
-        strcpy(current, next);
-    }
+    next_password(current, next);
+
     printf("Part 2: %s\n", current);
 }
 
