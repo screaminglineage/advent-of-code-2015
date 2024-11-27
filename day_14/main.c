@@ -13,7 +13,6 @@ int distance(int speed, int time_fly, int time_rest) {
 
     int distance = 0;
     while (time_left > 0) {
-        // printf("time_left = %d\n", time_left);
 
         if (time_left - time_unit < 0) {
             if (time_fly <= time_left) {
@@ -21,11 +20,9 @@ int distance(int speed, int time_fly, int time_rest) {
             } else {
                 distance += speed*time_left;
             }
-            // printf("distance = %d\n", distance);
             break;
         } else {
             distance += speed*time_fly;
-            // printf("distance = %d\n", distance);
         }
 
         time_left -= time_unit;
