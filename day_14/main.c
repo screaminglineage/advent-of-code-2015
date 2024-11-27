@@ -13,18 +13,10 @@ int distance(int speed, int time_fly, int time_rest) {
 
     int distance = 0;
     while (time_left > 0) {
-
-        if (time_left - time_unit < 0) {
-            if (time_fly <= time_left) {
-                distance += speed*time_fly;
-            } else {
-                distance += speed*time_left;
-            }
-            break;
-        } else {
-            distance += speed*time_fly;
+        if (time_left - time_unit < 0 && time_fly > time_left) {
+            time_fly = time_left;
         }
-
+        distance += speed*time_fly;
         time_left -= time_unit;
     }
     return distance;
@@ -37,8 +29,8 @@ int part1(char *data) {
     char *line = strtok(data, "\n");
     while (line) {
         int speed = -1, fly = -1, rest = -1;
-        char tmp[32] = {0};
-        sscanf(line, "%s can fly %d km/s for %d seconds, but then must rest for %d seconds.", tmp, &speed, &fly, &rest);
+        char name[16] = {0};
+        sscanf(line, "%s can fly %d km/s for %d seconds, but then must rest for %d seconds.", name, &speed, &fly, &rest);
         distances[i++] = distance(speed, fly, rest);
 	    line = strtok(NULL, "\n");
     }
