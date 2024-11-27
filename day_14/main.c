@@ -4,10 +4,10 @@
 #include <string.h>
 #include "../aoc.h"
 
-// #define MAX_TIME 2503
-// #define REINDEERS 9
-#define MAX_TIME 1000
-#define REINDEERS 2
+#define MAX_TIME 2503
+#define REINDEERS 9
+// #define MAX_TIME 1000
+// #define REINDEERS 2
 
 int distance(int speed, int time_fly, int time_rest) {
     int time_left = MAX_TIME;
@@ -116,13 +116,20 @@ int part2(char *data) {
                 }
             }
         }
-        int max_index = 0;
+        int max_indexes[REINDEERS] = {0};
+        max_indexes[0] = rd.data[0].distance;
+        int j = 0;
         for (size_t i = 0; i < rd.size; i++) {
-            if (rd.data[i].distance > rd.data[max_index].distance) {
-                max_index = i;
+            if (rd.data[i].distance > rd.data[max_indexes[j]].distance) {
+                max_indexes[j] = i;
+            } else if (rd.data[i].distance == rd.data[max_indexes[j]].distance) {
+                j += 1;
+                max_indexes[j] = i;
             }
         }
-        rd.data[max_index].points += 1;
+        for (int i = 0; i <= j; i++) {
+            rd.data[max_indexes[i]].points += 1;
+        }
         time_left -= 1;
     }
     /*printf("max_index = %d\n", max_index);*/
