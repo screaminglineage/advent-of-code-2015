@@ -6,8 +6,6 @@
 
 #define MAX_TIME 2503
 #define REINDEERS 9
-// #define MAX_TIME 1000
-// #define REINDEERS 2
 
 int distance(int speed, int time_fly, int time_rest) {
     int time_left = MAX_TIME;
@@ -44,18 +42,6 @@ int part1(char *data) {
         }
     }
     return max;
-}
-
-int distance_step(int *time_left, int speed, int time_fly, int time_rest) {
-    int time_unit = time_fly + time_rest;
-
-    int distance = 0;
-    if (*time_left - time_unit < 0 && time_fly > *time_left) {
-        time_fly = *time_left;
-    }
-    distance += speed*time_fly;
-    *time_left -= time_unit;
-    return distance;
 }
 
 typedef struct {
@@ -99,15 +85,16 @@ int part2(char *data) {
 
     int time_left = MAX_TIME;
     while (time_left > 0) {
+        // increment distance for each reindeeer
         for (size_t i = 0; i < rd.size; i++) {
-            if (rd.data[i].flying && rd.data[i].time_fly > 0) {
+            if (rd.data[i].flying) {
                 rd.data[i].distance += rs.data[i].speed;
                 rd.data[i].time_fly -= 1;
                 if (rd.data[i].time_fly == 0) {
                     rd.data[i].flying = false;
                 }
 
-            } else if (!rd.data[i].flying && rd.data[i].time_rest > 0) {
+            } else if (!rd.data[i].flying) {
                 rd.data[i].time_rest -= 1;
                 if (rd.data[i].time_rest == 0) {
                     rd.data[i].flying = true;
@@ -116,6 +103,8 @@ int part2(char *data) {
                 }
             }
         }
+
+        // find all reindeers with the highest distance to increment point
         int max_indexes[REINDEERS] = {0};
         max_indexes[0] = rd.data[0].distance;
         int j = 0;
@@ -132,17 +121,15 @@ int part2(char *data) {
         }
         time_left -= 1;
     }
-    /*printf("max_index = %d\n", max_index);*/
-    /*printf("rd.data[max_index].distance = %d\n", rd.data[max_index].distance);*/
-    // rd.data[max_index].points += 1;
 
-    int max_index = 0;
+    // find max point
+    int max_point = 0;
     for (size_t i = 0; i < rd.size; i++) {
-        if (rd.data[i].points > rd.data[max_index].points) {
-            max_index = i;
+        if (rd.data[i].points > max_point) {
+            max_point = rd.data[i].points;
         }
     }
-    return rd.data[max_index].points;
+    return max_point;
 }
 
 int main(int argc, char** argv) {
