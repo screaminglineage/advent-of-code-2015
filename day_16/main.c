@@ -84,11 +84,28 @@ int part1(AuntSue sues[AUNT_COUNT], AuntSue my_sue) {
 
         if (count == FEATURE_COUNT) return i + 1;
     }
-    return 0;
+    printf("Unreachable! Problem must have a solution\n");
+    exit(1);
 }
 
-int part2(AuntSue ings[AUNT_COUNT]) {
-    return 0;
+int part2(AuntSue sues[AUNT_COUNT], AuntSue my_sue) {
+    for (size_t i = 0; i < AUNT_COUNT; i++) {
+        int count = 0;
+        if (my_sue.children == sues[i].children) count++;
+        if (sues[i].cats != -1 && my_sue.cats < sues[i].cats) count++;
+        if (my_sue.samoyeds == sues[i].samoyeds) count++;
+        if (sues[i].pomeranians != -1 && my_sue.pomeranians > sues[i].pomeranians) count++;
+        if (my_sue.akitas == sues[i].akitas) count++;
+        if (my_sue.vizslas == sues[i].vizslas) count++;
+        if (sues[i].goldfish != -1 && my_sue.goldfish > sues[i].goldfish) count++;
+        if (sues[i].trees != -1 && my_sue.trees < sues[i].trees) count++;
+        if (my_sue.cars == sues[i].cars) count++;
+        if (my_sue.perfumes == sues[i].perfumes) count++;
+
+        if (count == FEATURE_COUNT) return i + 1;
+    }
+    printf("Unreachable! Problem must have a solution\n");
+    exit(1);
 }
 
 int main(int argc, char** argv) {
@@ -105,7 +122,7 @@ int main(int argc, char** argv) {
     };
 
     printf("Part 1: %d\n", part1(sues, aunt_to_find));
-    printf("Part 2: %d\n", part2(sues));
+    printf("Part 2: %d\n", part2(sues, aunt_to_find));
     return 0;
 }
 
