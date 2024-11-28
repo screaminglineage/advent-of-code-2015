@@ -54,13 +54,11 @@ void parse_ingredients(char *data, Ingredient *ings) {
 }
 
 
-int part1(char *data) {
-    Ingredient ings[INGS_COUNT] = {0};
-    parse_ingredients(data, ings);
+int part1(Ingredient ings[INGS_COUNT]) {
     return max_score(ings);
 }
 
-int part2(char *data) {
+int part2(Ingredient ings[INGS_COUNT]) {
     return 0;
 }
 
@@ -69,8 +67,11 @@ int main(int argc, char** argv) {
     char *input_file = argv[1];
     char *data = read_to_str(input_file);
 
-    printf("Part 1: %d\n", part1(data));
-    printf("Part 2: %d\n", part2(data));
+    Ingredient ings[INGS_COUNT] = {0};
+    parse_ingredients(data, ings);
+
+    printf("Part 1: %d\n", part1(ings));
+    printf("Part 2: %d\n", part2(ings));
     return 0;
 }
 
