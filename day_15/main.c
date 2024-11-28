@@ -58,8 +58,35 @@ int part1(Ingredient ings[INGS_COUNT]) {
     return max_score(ings);
 }
 
+int max_score_calories(Ingredient ings[INGS_COUNT]) {
+    int max = 0;
+    for (size_t i = 0; i <= AMOUNT; i++) {
+        for (size_t j = 0; i + j <= AMOUNT; j++) {
+            for (size_t k = 0; i + j + k <= AMOUNT; k++) {
+                for (size_t l = 0; i + j + k + l <= AMOUNT; l++) {
+                    if (i + j + k + l != AMOUNT) continue;
+
+                    int capacity = i*ings[0].capacity + j*ings[1].capacity + k*ings[2].capacity + l*ings[3].capacity;
+                    int durability = i*ings[0].durability + j*ings[1].durability + k*ings[2].durability + l*ings[3].durability;
+                    int flavor = i*ings[0].flavor + j*ings[1].flavor + k*ings[2].flavor + l*ings[3].flavor;
+                    int texture = i*ings[0].texture + j*ings[1].texture + k*ings[2].texture + l*ings[3].texture;
+
+                    int score = 0;
+                    if (capacity > 0 && durability > 0 && flavor > 0 && texture > 0) {
+                        score = capacity * durability * flavor * texture;
+                    }
+
+                    int calories = i*ings[0].calories + j*ings[1].calories + k*ings[2].calories + l*ings[3].calories;
+                    if (calories == 500 && score > max) max = score;
+                }
+            }
+        }
+    }
+    return max;
+}
+
 int part2(Ingredient ings[INGS_COUNT]) {
-    return 0;
+    return max_score_calories(ings);
 }
 
 int main(int argc, char** argv) {
