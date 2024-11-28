@@ -82,7 +82,7 @@ int part1(AuntSue sues[AUNT_COUNT], AuntSue my_sue) {
         if (my_sue.cars == sues[i].cars) count++;
         if (my_sue.perfumes == sues[i].perfumes) count++;
 
-        if (count >= 3) return i + 1;
+        if (count == FEATURE_COUNT) return i + 1;
     }
     return 0;
 }
