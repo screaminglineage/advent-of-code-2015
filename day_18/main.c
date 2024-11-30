@@ -64,16 +64,6 @@ void fill_current(char *data) {
     }
 }
 
-void print_board(bool *current) {
-    for (size_t i = 0; i < HEIGHT; i++) {
-        for (size_t j = 0; j < WIDTH; j++) {
-            printf("%c", MAT_AT(current, i, j)? '#': '.');
-        }
-        printf("\n");
-    }
-    printf("-----------------------------\n");
-}
-
 int part1() {
     bool *current_p = current;
     bool *next_p = next;
@@ -111,6 +101,13 @@ int count_neigbours_corner(int x, int y, bool *board) {
     return count;
 }
 
+void fill_corners(bool *board) {
+    MAT_AT(board, 0, 0) = true;
+    MAT_AT(board, HEIGHT - 1, 0) = true;
+    MAT_AT(board, 0, WIDTH - 1) = true;
+    MAT_AT(board, HEIGHT - 1, WIDTH - 1) = true;
+}
+
 void game_of_life2(bool *current, bool *next) {
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
@@ -122,22 +119,13 @@ void game_of_life2(bool *current, bool *next) {
             }
         }
     }
-    // turn on corners
-    MAT_AT(next, 0, 0) = true;
-    MAT_AT(next, HEIGHT - 1, 0) = true;
-    MAT_AT(next, 0, WIDTH - 1) = true;
-    MAT_AT(next, HEIGHT - 1, WIDTH - 1) = true;
+    fill_corners(next);
 }
 
 int part2() {
-    // turn on corners
-    MAT_AT(current, 0, 0) = true;
-    MAT_AT(current, HEIGHT - 1, 0) = true;
-    MAT_AT(current, 0, WIDTH - 1) = true;
-    MAT_AT(current, HEIGHT - 1, WIDTH - 1) = true;
-
     bool *current_p = current;
     bool *next_p = next;
+    fill_corners(current_p);
     for (size_t k = 0; k < STEPS; k++) {
         game_of_life2(current_p, next_p);
         swap_pointers(&current_p, &next_p);
