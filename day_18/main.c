@@ -64,7 +64,8 @@ void fill_current(char *data) {
     }
 }
 
-int part1() {
+int part1(char *data) {
+    fill_current(data);
     bool *current_p = current;
     bool *next_p = next;
     for (size_t k = 0; k < STEPS; k++) {
@@ -122,10 +123,11 @@ void game_of_life2(bool *current, bool *next) {
     fill_corners(next);
 }
 
-int part2() {
+int part2(char *data) {
+    fill_current(data);
     bool *current_p = current;
     bool *next_p = next;
-    fill_corners(current_p);
+
     for (size_t k = 0; k < STEPS; k++) {
         game_of_life2(current_p, next_p);
         swap_pointers(&current_p, &next_p);
@@ -147,10 +149,8 @@ int main(int argc, char** argv) {
 
     char *copy = malloc(count + 1);
     strcpy(copy, data);
-    fill_current(data);
-    printf("Part 1: %d\n", part1());
-    fill_current(copy);
-    printf("Part 2: %d\n", part2(data));
+    printf("Part 1: %d\n", part1(data));
+    printf("Part 2: %d\n", part2(copy));
     return 0;
 }
 
