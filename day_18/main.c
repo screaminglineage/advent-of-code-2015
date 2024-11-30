@@ -89,18 +89,79 @@ int part1() {
     return count;
 }
 
-int part2(char *data) {
-    return 0;
+int count_neigbours_corner(int x, int y, bool *board) {
+    int count = 0;
+    for (int dy = -1; dy <= 1; dy++) {
+        for (int dx = -1; dx <= 1; dx++) {
+            int new_x = x + dx;
+            int new_y = y + dy;
+
+            if ((new_x == 0 && new_y == 0)
+                || (new_x == WIDTH - 1 && new_y == 0)
+                || (new_x == 0 && new_y == HEIGHT - 1)
+                || (new_x == WIDTH - 1 && new_y == HEIGHT - 1)
+                || (new_x >= 0 && new_y >= 0
+                    && new_x < WIDTH && new_y < HEIGHT
+                    && !(dx == 0 && dy == 0)
+                    && MAT_AT(board, new_y, new_x))) {
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
+void game_of_life2(bool *current, bool *next) {
+    for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++) {
+            int neighbours = count_neigbours_corner(x, y, current);
+            if (MAT_AT(current, y, x)) {
+                MAT_AT(next, y, x) = (neighbours == 2 || neighbours == 3);
+            } else {
+                MAT_AT(next, y, x) = (neighbours == 3);
+            }
+        }
+    }
+    // turn on corners
+    MAT_AT(next, 0, 0) = true;
+    MAT_AT(next, HEIGHT - 1, 0) = true;
+    MAT_AT(next, 0, WIDTH - 1) = true;
+    MAT_AT(next, HEIGHT - 1, WIDTH - 1) = true;
+}
+
+int part2() {
+    // turn on corners
+    MAT_AT(current, 0, 0) = true;
+    MAT_AT(current, HEIGHT - 1, 0) = true;
+    MAT_AT(current, 0, WIDTH - 1) = true;
+    MAT_AT(current, HEIGHT - 1, WIDTH - 1) = true;
+
+    bool *current_p = current;
+    bool *next_p = next;
+    for (size_t k = 0; k < STEPS; k++) {
+        game_of_life2(current_p, next_p);
+        swap_pointers(&current_p, &next_p);
+    }
+
+    int count = 0;
+    for (size_t i = 0; i < HEIGHT*WIDTH; i++) {
+        if (current_p[i]) count += 1;
+    }
+    return count;
 }
 
 
 int main(int argc, char** argv) {
     (void)argc;
     char *input_file = argv[1];
-    char *data = read_to_str(input_file);
-    fill_current(data);
+    size_t count;
+    char *data = read_to_str_size(input_file, &count);
 
+    char *copy = malloc(count + 1);
+    strcpy(copy, data);
+    fill_current(data);
     printf("Part 1: %d\n", part1());
+    fill_current(copy);
     printf("Part 2: %d\n", part2(data));
     return 0;
 }
